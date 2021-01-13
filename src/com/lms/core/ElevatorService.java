@@ -1,5 +1,6 @@
 package com.lms.core;
 
+import com.lms.common.Response;
 import com.lms.exception.ElevatorOperationException;
 
 import java.util.HashSet;
@@ -35,14 +36,16 @@ public class ElevatorService {
             }
         }
 
+        Response response = new Response();
         for (String elevatorId : elevators) {
             Elevator elevator = elevatorController.getElevator(elevatorId);
-            int time = elevator.goUp();
+            int time = elevator.goUp(response);
             if (elevator.isBiDirectional()) {
                 elevatorController.changeDirection(elevator);
-                elevator.comeDown(time);
+                elevator.comeDown(time, response);
             }
             elevator.reset();
         }
+        response.print();
     }
 }

@@ -1,7 +1,9 @@
 package com.lms.core;
 
+import com.lms.common.LMSConstants;
 import com.lms.common.LMSConstants.DIRECTION;
 import com.lms.common.LMSConstants.STATE;
+import com.lms.common.Response;
 import com.lms.exception.ElevatorOperationException;
 
 import static com.lms.common.LMSConstants.MAX_FLOOR;
@@ -153,14 +155,14 @@ public class Elevator {
         direction = direction == DIRECTION.UP ? DIRECTION.DOWN : DIRECTION.UP;
     }
 
-    public int goUp() {
+    public int goUp(Response response) {
         int time = 0;
         int i = currentMinimum;
         while (i <= currentMaximum) {
-            System.out.println("T = " + time);
+            String timeKey = "T = " + time;
             if (this.hasStop(i)) {
                 this.changeState();
-                printElevatorStatus(false);
+                response.addElevatorStatus(timeKey, getElevatorStatus(false));
                 if (state == CLOSE) {
                     if (currentFloor < currentMaximum) {
                         this.moveNext();
@@ -168,7 +170,7 @@ public class Elevator {
                     i++;
                 }
             } else {
-                printElevatorStatus(false);
+                response.addElevatorStatus(timeKey, getElevatorStatus(false));
                 if (this.currentFloor < currentMaximum) {
                     this.moveNext();
                 }
@@ -177,44 +179,52 @@ public class Elevator {
             time++;
         }
         if (!this.isBiDirectional()) {
-            System.out.println(this.id + ":" + time + " SECONDS");
-            System.out.println("---------------------------------");
+            String totalTime = this.id + ":" + (time - 1) + " SECONDS";
+            response.addTimeUnit(totalTime);
         }
         return time;
     }
 
-    public void comeDown(int time) {
+    public void comeDown(int time, Response response) {
         int i = currentMaximum;
         while (i >= currentMinimum) {
             if (i == currentMaximum) {
                 moveNext();
                 i--;
             } else {
-                System.out.println("T = " + time);
+                String timeKey = "T = " + time;
                 if (this.hasStop(i)) {
                     this.changeState();
-                    printElevatorStatus(false);
+                    response.addElevatorStatus(timeKey, getElevatorStatus(false));
                     if (state == CLOSE) {
                         this.moveNext();
                         i--;
                     }
                 } else {
-                    printElevatorStatus(false);
+                    response.addElevatorStatus(timeKey, getElevatorStatus(false));
                     this.moveNext();
                     i--;
                 }
-                time++;
+                if (i >= currentMinimum) {
+                    time++;
+                }
             }
         }
-        System.out.println(this.id + ":" + time + " SECONDS");
+        String totalTime = this.id + ":" + (time) + " SECONDS";
+        response.addTimeUnit(totalTime);
     }
 
-    public void printElevatorStatus(boolean printDebugInfo) {
+    public String getElevatorStatus(boolean printDebugInfo) {
         if (!printDebugInfo) {
-            System.out.println(this.getId() + " --> " + this.getCurrentFloor() + "(" + this.getState().name() + ")\n");
+            StringBuilder status = new StringBuilder();
+            status.append(this.getId()).append(LMSConstants.separator);
+            status.append(this.getCurrentFloor());
+            status.append("(" + this.getState().name() + ")");
+            return status.toString();
         } else {
             System.out.println(this);
         }
+        return "";
     }
 
     @Override
