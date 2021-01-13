@@ -138,14 +138,6 @@ public class Elevator {
         this.stops = new boolean[MAX_FLOOR + 1];
     }
 
-    public void moveToFloor(int floor) {
-        if ((floor < MIN_FLOOR) || (floor > MAX_FLOOR)) {
-            throw new ElevatorOperationException("Invalid Move Request");
-        }
-        reset();
-        currentFloor = floor;
-    }
-
     public int changeState() {
         state = state == CLOSE ? OPEN : CLOSE;
         return 1;

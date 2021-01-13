@@ -4,7 +4,7 @@ import com.lms.core.ElevatorPanel;
 
 import static com.lms.common.LMSConstants.*;
 
-public class Test {
+public class LMS {
 
     public static void main(String[] args) {
         initEnvironmentVariables();
