@@ -1,9 +1,7 @@
 package com.lms.core;
 
 import com.lms.common.Response;
-import com.lms.exception.ElevatorOperationException;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,6 +30,10 @@ public class ElevatorService {
                 int temp_destination = source;
                 DIRECTION direction = DIRECTION.UP;
                 String elevatorId = elevatorController.chooseElevator(temp_source, temp_destination, direction, true);
+                elevators.add(elevatorId);
+            }else if(source > destination){
+                DIRECTION direction = DIRECTION.DOWN;
+                String elevatorId = elevatorController.chooseElevator(source, destination, direction, false);
                 elevators.add(elevatorId);
             }
         }
