@@ -7,11 +7,11 @@ import java.util.TreeSet;
 
 import static com.lms.common.LMSConstants.*;
 
-public class ElevatorService {
+public class ElevatorPanel {
 
     private ElevatorController elevatorController = null;
 
-    public ElevatorService() {
+    public ElevatorPanel() {
         elevatorController = new ElevatorController(MIN_FLOOR, MAX_FLOOR, ELEVATORS);
     }
 
